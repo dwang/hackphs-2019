@@ -1,0 +1,10 @@
+{
+    "name": "Postulating Posture",
+    "version": "1.0",
+    "Description": "Posture Postulation",
+    "background":{
+        "scripts":["script.js"],
+        "persistent" = false
+    },
+    "manifest_version": 2
+}
