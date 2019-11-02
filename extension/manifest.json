@@ -1,0 +1,11 @@
+{
+    "name": "Postulating Posture",
+    "version": "1.0",
+    "description": "Posture Postulation",
+    "page_action": {
+        "default_popup": "ext.html"
+    },
+    "manifest_version": 2
+}
+    
+    

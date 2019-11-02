@@ -1,0 +1,1 @@
+document.getElementsByClassName("html").innerText = "blur(5px)";
