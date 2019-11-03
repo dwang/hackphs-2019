@@ -40,17 +40,42 @@ def shadow_text(dwg, x, y, text, font_size=16):
                      font_size=font_size, style="font-family:sans-serif"))
 
 
-def draw_pose(draw, dwg, pose, color="blue", threshold=0.2):
+x = 0
+
+def draw_pose(draw, dwg, pose, first=False, color="blue", threshold=0.3):
+    global x
+
     xys = {}
+
+    original_right_eye_y = 270
+
+    if pose.score < threshold:
+        return
+
     for label, keypoint in pose.keypoints.items():
-        if keypoint.score < threshold: continue
-        print(label, (int(keypoint.yx[1]), int(keypoint.yx[0])))
+        if keypoint.score < 0.9: continue
+        if label == "right eye":
+            print(" %-20s x=%-4d y=%-4d score=%.1f" % (label, keypoint.yx[1], keypoint.yx[0], keypoint.score))
         xys[label] = (int(keypoint.yx[1]), int(keypoint.yx[0]))
         dwg.add(dwg.circle(center=(int(keypoint.yx[1]), int(keypoint.yx[0])), r=5,
                            fill="cyan", fill_opacity=keypoint.score, stroke=color))
 
+        if (label == "right eye" and abs(keypoint.yx[0] - original_right_eye_y) > 50 and keypoint.yx[0] != 0):
+            x += 1
+
+            print(x)
+
+            print(abs(keypoint.yx[0] - original_right_eye_y))
+
+            if x > 20 and draw != None:
+                draw.ellipse((0, 0, 1000, 1000), fill=(255,0,0,0))
+
+
+        if (label == "right eye" and abs(keypoint.yx[0] - original_right_eye_y) < 50 and keypoint.yx[0] != 0):
+            x = 0
+
         if draw != None:
-            draw.point((int(keypoint.yx[1]), int(keypoint.yx[0])))
+            draw.ellipse((int(keypoint.yx[1]) - 5, int(keypoint.yx[0]) - 5, int(keypoint.yx[1]) + 5, int(keypoint.yx[0]) + 5), fill=(255,0,0,0))
 
     for a, b in EDGES:
         if a not in xys or b not in xys: continue
@@ -92,7 +117,6 @@ def run(callback, use_appsrc=False):
                            use_appsrc=use_appsrc, mirror=args.mirror,
                            videosrc=args.videosrc, h264input=args.h264)
 
-
 def main():
     last_time = time.monotonic()
     n = 0
@@ -100,11 +124,11 @@ def main():
     sum_process_time = 0
     sum_inference_time = 0
 
-    def render_overlay(engine, image, svg_canvas):
-        nonlocal n, sum_fps, sum_process_time, sum_inference_time, last_time
+    out = Image.new("RGB", (1280, 720))
+    draw = ImageDraw.Draw(out)
 
-        out = Image.new("RGB", (1280, 720))
-        draw = ImageDraw.Draw(out)
+    def render_overlay(engine, image, svg_canvas):
+        nonlocal n, sum_fps, sum_process_time, sum_inference_time, last_time, out, draw
 
         start_time = time.monotonic()
         outputs, inference_time = engine.DetectPosesInImage(image)
@@ -120,11 +144,13 @@ def main():
 
         shadow_text(svg_canvas, 10, 20, text_line)
 
-        for pose in outputs:
-            draw_pose(draw, svg_canvas, pose)
 
-        if (n % 10 == 0):
-            out.save("data/" + str(n) + ".png")
+        draw_pose(draw, svg_canvas, outputs[0])
+
+        if (n % 10   == 0):
+            out.save("output.png")
+            out = Image.new("RGB", (1280, 720))
+            draw = ImageDraw.Draw(out)
 
     run(render_overlay)
 
