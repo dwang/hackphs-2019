@@ -113,8 +113,8 @@ def draw_pose(draw, dwg, pose, first=False, color="blue", threshold=0.3):
                 }
 
                 if report == True:
-                    requests.post("http://172.16.249.255:8000/blur", data="True")
-                    requests.post("http://172.16.249.255:8000/event", json=data)
+                    requests.post("https://poseright.ml/blur", data="True")
+                    requests.post("https://poseright.ml/event", json=data)
                     report = False
 
         if (
@@ -125,7 +125,7 @@ def draw_pose(draw, dwg, pose, first=False, color="blue", threshold=0.3):
             x = 0
             if report == False:
                 report = True
-                requests.post("http://172.16.249.255:8000/blur", data="False")
+                requests.post("https://poseright.ml/blur", data="False")
 
         draw.ellipse(
             (
@@ -229,7 +229,7 @@ def main():
             out = Image.new("RGB", (1280, 720))
             draw = ImageDraw.Draw(out)
 
-            if requests.get("http://172.16.249.255:8000/calibrate").text == "True":
+            if requests.get("https://poseright.ml/calibrate").text == "True":
                 calibrate = True
 
     run(render_overlay)
