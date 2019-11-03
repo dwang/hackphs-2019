@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-
+from bson.json_util import dumps
 from flask_cors import CORS
 
 import json
@@ -29,7 +29,7 @@ def event():
 
 @app.route("/events")
 def events():
-    return str(database.get_events())
+    return dumps(database.get_events())
 
 
 if __name__ == "__main__":
