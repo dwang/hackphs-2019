@@ -1,4 +1,6 @@
 body
 {
+    transition: 0.9s ;
     filter: blur(0px)
+    
 }
