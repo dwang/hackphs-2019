@@ -9,12 +9,9 @@ db = client["database"]
 collection = db.collection
 
 
-def add_event(time, x_position, y_position, baseline_y_position, score):
+def add_event(time, score):
     post = {
         "time": time,
-        "x_position": x_position,
-        "y_position": y_position,
-        "baseline_y_position": baseline_y_position,
         "score": score,
     }
 
