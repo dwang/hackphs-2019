@@ -34,13 +34,28 @@ EDGES = (
 
 
 def shadow_text(dwg, x, y, text, font_size=16):
-    dwg.add(dwg.text(text, insert=(x + 1, y + 1), fill="black",
-                     font_size=font_size, style="font-family:sans-serif"))
-    dwg.add(dwg.text(text, insert=(x, y), fill="white",
-                     font_size=font_size, style="font-family:sans-serif"))
+    dwg.add(
+        dwg.text(
+            text,
+            insert=(x + 1, y + 1),
+            fill="black",
+            font_size=font_size,
+            style="font-family:sans-serif",
+        )
+    )
+    dwg.add(
+        dwg.text(
+            text,
+            insert=(x, y),
+            fill="white",
+            font_size=font_size,
+            style="font-family:sans-serif",
+        )
+    )
 
 
 x = 0
+
 
 def draw_pose(draw, dwg, pose, first=False, color="blue", threshold=0.3):
     global x
@@ -53,14 +68,29 @@ def draw_pose(draw, dwg, pose, first=False, color="blue", threshold=0.3):
         return
 
     for label, keypoint in pose.keypoints.items():
-        if keypoint.score < 0.9: continue
+        if keypoint.score < 0.9:
+            continue
         if label == "right eye":
-            print(" %-20s x=%-4d y=%-4d score=%.1f" % (label, keypoint.yx[1], keypoint.yx[0], keypoint.score))
+            print(
+                " %-20s x=%-4d y=%-4d score=%.1f"
+                % (label, keypoint.yx[1], keypoint.yx[0], keypoint.score)
+            )
         xys[label] = (int(keypoint.yx[1]), int(keypoint.yx[0]))
-        dwg.add(dwg.circle(center=(int(keypoint.yx[1]), int(keypoint.yx[0])), r=5,
-                           fill="cyan", fill_opacity=keypoint.score, stroke=color))
+        dwg.add(
+            dwg.circle(
+                center=(int(keypoint.yx[1]), int(keypoint.yx[0])),
+                r=5,
+                fill="cyan",
+                fill_opacity=keypoint.score,
+                stroke=color,
+            )
+        )
 
-        if (label == "right eye" and abs(keypoint.yx[0] - original_right_eye_y) > 50 and keypoint.yx[0] != 0):
+        if (
+            label == "right eye"
+            and abs(keypoint.yx[0] - original_right_eye_y) > 50
+            and keypoint.yx[0] != 0
+        ):
             x += 1
 
             print(x)
@@ -68,15 +98,28 @@ def draw_pose(draw, dwg, pose, first=False, color="blue", threshold=0.3):
             print(abs(keypoint.yx[0] - original_right_eye_y))
 
             if x > 20:
-                draw.ellipse((0, 0, 1000, 1000), fill=(255,0,0,0))
+                draw.ellipse((0, 0, 1000, 1000), fill=(255, 0, 0, 0))
 
-        if (label == "right eye" and abs(keypoint.yx[0] - original_right_eye_y) < 50 and keypoint.yx[0] != 0):
+        if (
+            label == "right eye"
+            and abs(keypoint.yx[0] - original_right_eye_y) < 50
+            and keypoint.yx[0] != 0
+        ):
             x = 0
 
-        draw.ellipse((int(keypoint.yx[1]) - 5, int(keypoint.yx[0]) - 5, int(keypoint.yx[1]) + 5, int(keypoint.yx[0]) + 5), fill=(255,0,0,0))
+        draw.ellipse(
+            (
+                int(keypoint.yx[1]) - 5,
+                int(keypoint.yx[0]) - 5,
+                int(keypoint.yx[1]) + 5,
+                int(keypoint.yx[0]) + 5,
+            ),
+            fill=(255, 0, 0, 0),
+        )
 
     for a, b in EDGES:
-        if a not in xys or b not in xys: continue
+        if a not in xys or b not in xys:
+            continue
         ax, ay = xys[a]
         bx, by = xys[b]
         dwg.add(dwg.line(start=(ax, ay), end=(bx, by), stroke=color, stroke_width=2))
@@ -84,12 +127,20 @@ def draw_pose(draw, dwg, pose, first=False, color="blue", threshold=0.3):
 
 
 def run(callback, use_appsrc=False):
-    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
     parser.add_argument("--mirror", help="flip video horizontally", action="store_true")
     parser.add_argument("--model", help=".tflite model path.", required=False)
-    parser.add_argument("--res", help="Resolution", default="1280x720",
-                        choices=["480x360", "640x480", "1280x720"])
-    parser.add_argument("--videosrc", help="Which video source to use", default="/dev/video0")
+    parser.add_argument(
+        "--res",
+        help="Resolution",
+        default="1280x720",
+        choices=["480x360", "640x480", "1280x720"],
+    )
+    parser.add_argument(
+        "--videosrc", help="Which video source to use", default="/dev/video0"
+    )
     parser.add_argument("--h264", help="Use video/x-h264 input", action="store_true")
     args = parser.parse_args()
 
@@ -109,10 +160,16 @@ def run(callback, use_appsrc=False):
 
     print("Loading model: ", model)
     engine = PoseEngine(model, mirror=args.mirror)
-    gstreamer.run_pipeline(partial(callback, engine),
-                           src_size, appsink_size,
-                           use_appsrc=use_appsrc, mirror=args.mirror,
-                           videosrc=args.videosrc, h264input=args.h264)
+    gstreamer.run_pipeline(
+        partial(callback, engine),
+        src_size,
+        appsink_size,
+        use_appsrc=use_appsrc,
+        mirror=args.mirror,
+        videosrc=args.videosrc,
+        h264input=args.h264,
+    )
+
 
 def main():
     last_time = time.monotonic()
@@ -136,14 +193,17 @@ def main():
         sum_inference_time += inference_time
         last_time = end_time
         text_line = "PoseNet: %.1fms Frame IO: %.2fms TrueFPS: %.2f Nposes %d" % (
-            sum_inference_time / n, sum_process_time / n, sum_fps / n, len(outputs)
+            sum_inference_time / n,
+            sum_process_time / n,
+            sum_fps / n,
+            len(outputs),
         )
 
         shadow_text(svg_canvas, 10, 20, text_line)
 
         draw_pose(draw, svg_canvas, outputs[0])
 
-        if (n % 10   == 0):
+        if n % 10 == 0:
             out.save("output.png")
             out = Image.new("RGB", (1280, 720))
             draw = ImageDraw.Draw(out)
