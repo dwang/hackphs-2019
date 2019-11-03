@@ -13,6 +13,10 @@ CORS(app)
 def home():
     return render_template("index.html")
 
+@app.route("/info")
+def info():
+    return render_template("info.html")
+
 
 @app.route("/event", methods=["POST"])
 def event():
