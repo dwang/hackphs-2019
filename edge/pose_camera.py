@@ -107,7 +107,7 @@ def draw_pose(draw, dwg, pose, first=False, color="blue", threshold=0.3):
                     "x_position": float(keypoint.yx[1]),
                     "y_position": float(keypoint.yx[0]),
                     "baseline_y_position": float(original_right_eye_y),
-                    "score": float(keypoint.score)
+                    "score": float(keypoint.score),
                 }
 
                 if report == True:
