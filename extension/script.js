@@ -1,16 +1,9 @@
 
 $(document).ready(function(){
-    $('#calibrate').click(function a()
-    {
-        fetch('http://172.16.249.255:8000/calibrate', {
-  method: 'post',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({a: 7, str: 'Some string: &=&'})
-
-});
-});
+    $('#calibrate').click(function a(){
+        fetch('http://172.16.249.255:8000/calibrate', {method: 'post'}
+             );
+    });
 });
 const interval = setInterval(function() {
     var s = false;
