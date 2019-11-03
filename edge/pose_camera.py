@@ -58,14 +58,13 @@ def shadow_text(dwg, x, y, text, font_size=16):
 
 x = 0
 report = True
-
+calibrate = True
+original_right_eye_y = 270
 
 def draw_pose(draw, dwg, pose, first=False, color="blue", threshold=0.3):
-    global x, report
+    global x, report, calibrate, original_right_eye_y
 
     xys = {}
-
-    original_right_eye_y = 270
 
     if pose.score < threshold:
         return
@@ -78,6 +77,12 @@ def draw_pose(draw, dwg, pose, first=False, color="blue", threshold=0.3):
                 " %-20s x=%-4d y=%-4d score=%.1f"
                 % (label, keypoint.yx[1], keypoint.yx[0], keypoint.score)
             )
+
+            if calibrate == True:
+                original_right_eye_y = keypoint.yx[0]
+                print("Calibrated", original_right_eye_y)
+                calibrate = False
+
         xys[label] = (int(keypoint.yx[1]), int(keypoint.yx[0]))
         dwg.add(
             dwg.circle(
@@ -100,7 +105,7 @@ def draw_pose(draw, dwg, pose, first=False, color="blue", threshold=0.3):
 
             print(abs(keypoint.yx[0] - original_right_eye_y))
 
-            if x > 20:
+            if x > 10:
                 draw.ellipse((0, 0, 1000, 1000), fill=(255, 0, 0, 0))
                 data = {
                     "time": str(datetime.datetime.now()),
@@ -108,6 +113,7 @@ def draw_pose(draw, dwg, pose, first=False, color="blue", threshold=0.3):
                 }
 
                 if report == True:
+                    requests.post("http://172.16.249.255:8000/blur", data="True")
                     requests.post("http://172.16.249.255:8000/event", json=data)
                     report = False
 
@@ -117,7 +123,9 @@ def draw_pose(draw, dwg, pose, first=False, color="blue", threshold=0.3):
             and keypoint.yx[0] != 0
         ):
             x = 0
-            report = True
+            if report == False:
+                report = True
+                requests.post("http://172.16.249.255:8000/blur", data="False")
 
         draw.ellipse(
             (
@@ -195,6 +203,7 @@ def main():
 
     def render_overlay(engine, image, svg_canvas):
         nonlocal n, sum_fps, sum_process_time, sum_inference_time, last_time, out, draw
+        global calibrate
 
         start_time = time.monotonic()
         outputs, inference_time = engine.DetectPosesInImage(image)
@@ -219,6 +228,9 @@ def main():
             out.save("output.png")
             out = Image.new("RGB", (1280, 720))
             draw = ImageDraw.Draw(out)
+
+            if requests.get("http://172.16.249.255:8000/calibrate").text == "True":
+                calibrate = True
 
     run(render_overlay)
 

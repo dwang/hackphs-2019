@@ -23,6 +23,32 @@ def event():
     )
     return "200"
 
+previous = "False"
+
+@app.route("/calibrate", methods=["GET", "POST"])
+def calibrate():
+    global previous
+
+    output = previous
+
+    if request.method == "POST":
+        previous = "True"
+    else:
+        previous = "False"
+
+    return output
+
+output = "False"
+
+@app.route("/blur", methods=["GET", "POST"])
+def blur():
+    global output
+
+    if request.method == "POST":
+        output = request.get_data()
+
+    return output
+
 
 @app.route("/events")
 def events():
