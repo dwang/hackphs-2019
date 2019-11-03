@@ -10,10 +10,18 @@
     "content_scripts": [{
         "matches":["<all_urls>"],
         "css": ["blur.css", "unblur.css"],
-        "js":["script.js", "jquery-3.4.1.js"]
+        "js":["jquery-3.4.1.js","script.js"]
     }],
 
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": false
+      },
+
     "permissions": [
-        "activeTab"
+        "tabs",
+        "activeTab",
+        "http://*/",
+        "https://*/"
     ]
 }
