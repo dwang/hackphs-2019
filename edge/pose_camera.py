@@ -104,10 +104,7 @@ def draw_pose(draw, dwg, pose, first=False, color="blue", threshold=0.3):
                 draw.ellipse((0, 0, 1000, 1000), fill=(255, 0, 0, 0))
                 data = {
                     "time": str(datetime.datetime.now()),
-                    "x_position": float(keypoint.yx[1]),
-                    "y_position": float(keypoint.yx[0]),
-                    "baseline_y_position": float(original_right_eye_y),
-                    "score": float(keypoint.score),
+                    "score": float(abs(keypoint.yx[0] - original_right_eye_y))
                 }
 
                 if report == True:

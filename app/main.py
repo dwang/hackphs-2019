@@ -19,9 +19,6 @@ def event():
     data = request.get_json(force=True)
     database.add_event(
         data["time"],
-        data["x_position"],
-        data["y_position"],
-        data["baseline_y_position"],
         data["score"],
     )
     return "200"
