@@ -7,18 +7,40 @@
 
 <body>
     <div class="container">
-        <div class="row">
-            <div class="col-sm-14"></div>
-            <div class="col-md-4" style="padding-top: 5em">
-                <h4 align="left"><i>Postualting Posture</i></h4>
-                <h5><i>A mission to fix everyone's Posture</i></h5>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand">Postulating Posture</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Info</a>
+                    </li>
+                </ul>
+
+                <!-- google oauth here if time-->
+                <!-- <form class="form-inline my-2 my-lg-0">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                      </form> -->
             </div>
-        </div>
-    
+        </nav>
 
         <br>
         <br>
-        <br>
+
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h3 class="display-3" style="color: #cdaa54"><i>Postulating Posture</i></h3>
+                <p class="lead">Our mission is to help improve your health and reduce implications of one's incorrect posture. Reference <a href="info.html">here</a> for more information.</p>
+            </div>
+        </div>
+
         <br>
         <br>
 
@@ -27,20 +49,20 @@
                 <button id="score" type="button" class="btn btn-secondary">Score</button>
                 <button id="time" type="button" class="btn btn-secondary">Time Spent</button>
 
-  </div>
+            </div>
 
             <br>
             <br>
-           
+
             <div class="shadow p-3 mb-5 bg-white rounded">
                 <canvas id="graph" width="30vw" height="17vh"></canvas>
             </div>
 
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
-            
+
             <script>
-                
+
                 /* a default chart to be displayed (most likely gong to be score vs time) */
                 var chart = new Chart(document.querySelector("#graph").getContext('2d'), {
                     type: 'pie',
@@ -53,6 +75,7 @@
                         }]
                     },
                     options: {
+                        // responsive: false,
                         title: {
                             display: true,
                             text: 'Predicted world population (millions) in 2050'
@@ -96,6 +119,7 @@
                             ]
                         },
                         options: {
+                            // responsive: false,
                             title: {
                                 display: true,
                                 text: 'World population per region (in millions)'
