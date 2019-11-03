@@ -74,7 +74,7 @@ def draw_pose(draw, dwg, pose, first=False, color="blue", threshold=0.3):
             continue
         if label == "right eye":
             print(
-                " %-20s x=%-4d y=%-4d score=%.1f"
+                "%-20s x=%-4d y=%-4d score=%.1f"
                 % (label, keypoint.yx[1], keypoint.yx[0], keypoint.score)
             )
 
@@ -101,9 +101,9 @@ def draw_pose(draw, dwg, pose, first=False, color="blue", threshold=0.3):
         ):
             x += 1
 
-            print(x)
-
-            print(abs(keypoint.yx[0] - original_right_eye_y))
+            print("Number of bad positions: ", x)
+            print("Distance from calibrated y-coordinate: ", abs(keypoint.yx[0] - original_right_eye_y))
+            print()
 
             if x > 10:
                 draw.ellipse((0, 0, 1000, 1000), fill=(255, 0, 0, 0))
