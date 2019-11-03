@@ -4,7 +4,7 @@ import os
 
 ip = os.getenv("MONGO_IP", "127.0.0.1")
 
-client = pymongo.MongoClient("ip", 27017)
+client = pymongo.MongoClient(ip, 27017)
 db = client["database"]
 collection = db.collection
 
