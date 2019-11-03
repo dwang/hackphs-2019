@@ -1,6 +1,6 @@
 
 $(document).ready(function(){
     $('#calibrate').click(function a(){
-        fetch('https://poseright.ml/calibrate', {method: 'post'});
+        fetch('http://172.16.249.255:8000/calibrate', {method: 'post'});
     });
 });
