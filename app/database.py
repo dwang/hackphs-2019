@@ -9,10 +9,12 @@ db = client["database"]
 collection = db.collection
 
 
-def add_event(time, score):
+def add_event(time, score, y_coordinate, baseline_y_coordinate):
     post = {
         "time": time,
         "score": score,
+        "y_coordinate": y_coordinate,
+        "baseline_y_coordinate": baseline_y_coordinate
     }
 
     collection.insert_one(post)
