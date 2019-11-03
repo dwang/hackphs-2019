@@ -1,5 +1,5 @@
 {
-    "name": "Button it up!",
+    "name": "Postulating Posture",
     "version": "1.0",
     "manifest_version": 2,
 
@@ -9,9 +9,10 @@
 
     "content_scripts": [{
         "matches":["<all_urls>"],
-        "js":["script.js"]
+        "css": ["blur.css", "unblur.css"],
+        "js":["script.js", "jquery-3.4.1.js"]
     }],
-    
+
     "permissions": [
         "activeTab"
     ]
