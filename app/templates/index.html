@@ -37,7 +37,8 @@
         <div class="jumbotron jumbotron-fluid">
             <div class="container">
                 <h3 class="display-3" style="color: #cdaa54"><i>Postulating Posture</i></h3>
-                <p class="lead">Our mission is to help improve your health and reduce implications of one's incorrect posture. Reference <a href="info.html">here</a> for more information.</p>
+                <p class="lead">Our mission is to help improve your health and reduce implications of one's incorrect
+                    posture. Reference <a href="info.html">here</a> for more information.</p>
             </div>
         </div>
 
@@ -62,8 +63,12 @@
             <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
 
             <script>
-
-                /* a default chart to be displayed (most likely gong to be score vs time) */
+                let url = "http://172.16.249.255:8000/events"
+                // fetch(url)
+                //     .then(res => res.json())
+                //     .then((out) => {
+                //         console.log(out)
+                //     })                /* a default chart to be displayed (most likely gong to be score vs time) */
                 var chart = new Chart(document.querySelector("#graph").getContext('2d'), {
                     type: 'pie',
                     data: {
@@ -84,48 +89,27 @@
                 });
 
                 $("#score").on("click", function () {
-                    var context1 = document.querySelector('#graph').getContext('2d');
-                    // new Chart(context1).Line(data);
-                    var chart1 = new Chart(context1, {
-                        type: 'line',
-                        data: {
-                            labels: [1500, 1600, 1700, 1750, 1800, 1850, 1900, 1950, 1999, 2050],
-                            datasets: [{
-                                data: [86, 114, 106, 106, 107, 111, 133, 221, 783, 2478],
-                                label: "Africa",
-                                borderColor: "#3e95cd",
-                                fill: false
-                            }, {
-                                data: [282, 350, 411, 502, 635, 809, 947, 1402, 3700, 5267],
-                                label: "Asia",
-                                borderColor: "#8e5ea2",
-                                fill: false
-                            }, {
-                                data: [168, 170, 178, 190, 203, 276, 408, 547, 675, 734],
-                                label: "Europe",
-                                borderColor: "#3cba9f",
-                                fill: false
-                            }, {
-                                data: [40, 20, 10, 16, 24, 38, 74, 167, 508, 784],
-                                label: "Latin America",
-                                borderColor: "#e8c3b9",
-                                fill: false
-                            }, {
-                                data: [6, 3, 2, 2, 7, 26, 82, 172, 312, 433],
-                                label: "North America",
-                                borderColor: "#c45850",
-                                fill: false
-                            }
-                            ]
-                        },
-                        options: {
-                            // responsive: false,
-                            title: {
-                                display: true,
-                                text: 'World population per region (in millions)'
-                            }
-                        }
-                    });
+                    fetch(url)
+                        .then(res => res.json())
+                        .then((out) => {
+                            console.log(out[0].score)
+
+                            var context1 = document.querySelector('#graph').getContext('2d');
+                            // new Chart(context1).Line(data);
+                            var chart1 = new Chart(context1, {
+                                type: 'line',
+                                data: out,
+
+                                options: {
+                                    // responsive: false,
+                                    title: {
+                                        display: true,
+                                        text: 'World population per region (in millions)'
+                                    }
+                                }
+                            });
+
+                        })
 
                 });
                 $("#time").on("click", function () {
