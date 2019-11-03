@@ -67,23 +67,20 @@ def draw_pose(draw, dwg, pose, first=False, color="blue", threshold=0.3):
 
             print(abs(keypoint.yx[0] - original_right_eye_y))
 
-            if x > 20 and draw != None:
+            if x > 20:
                 draw.ellipse((0, 0, 1000, 1000), fill=(255,0,0,0))
-
 
         if (label == "right eye" and abs(keypoint.yx[0] - original_right_eye_y) < 50 and keypoint.yx[0] != 0):
             x = 0
 
-        if draw != None:
-            draw.ellipse((int(keypoint.yx[1]) - 5, int(keypoint.yx[0]) - 5, int(keypoint.yx[1]) + 5, int(keypoint.yx[0]) + 5), fill=(255,0,0,0))
+        draw.ellipse((int(keypoint.yx[1]) - 5, int(keypoint.yx[0]) - 5, int(keypoint.yx[1]) + 5, int(keypoint.yx[0]) + 5), fill=(255,0,0,0))
 
     for a, b in EDGES:
         if a not in xys or b not in xys: continue
         ax, ay = xys[a]
         bx, by = xys[b]
         dwg.add(dwg.line(start=(ax, ay), end=(bx, by), stroke=color, stroke_width=2))
-        if draw != None:
-            draw.line([(ax, ay), (bx, by)], fill=color, width=2)
+        draw.line([(ax, ay), (bx, by)], fill=color, width=2)
 
 
 def run(callback, use_appsrc=False):
@@ -143,7 +140,6 @@ def main():
         )
 
         shadow_text(svg_canvas, 10, 20, text_line)
-
 
         draw_pose(draw, svg_canvas, outputs[0])
 
