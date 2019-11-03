@@ -2,11 +2,13 @@ import argparse
 from functools import partial
 import re
 import time
+import datetime
 
 import numpy as np
 from PIL import Image, ImageDraw
 import svgwrite
 import gstreamer
+import requests
 
 from pose_engine import PoseEngine
 
@@ -55,10 +57,11 @@ def shadow_text(dwg, x, y, text, font_size=16):
 
 
 x = 0
+report = True
 
 
 def draw_pose(draw, dwg, pose, first=False, color="blue", threshold=0.3):
-    global x
+    global x, report
 
     xys = {}
 
@@ -68,7 +71,7 @@ def draw_pose(draw, dwg, pose, first=False, color="blue", threshold=0.3):
         return
 
     for label, keypoint in pose.keypoints.items():
-        if keypoint.score < 0.9:
+        if keypoint.score < 0.8:
             continue
         if label == "right eye":
             print(
@@ -99,6 +102,14 @@ def draw_pose(draw, dwg, pose, first=False, color="blue", threshold=0.3):
 
             if x > 20:
                 draw.ellipse((0, 0, 1000, 1000), fill=(255, 0, 0, 0))
+                data = {
+                    "time": str(datetime.datetime.now()),
+                    "score": float(abs(keypoint.yx[0] - original_right_eye_y))
+                }
+
+                if report == True:
+                    requests.post("http://172.16.249.255:8000/event", json=data)
+                    report = False
 
         if (
             label == "right eye"
@@ -106,6 +117,7 @@ def draw_pose(draw, dwg, pose, first=False, color="blue", threshold=0.3):
             and keypoint.yx[0] != 0
         ):
             x = 0
+            report = True
 
         draw.ellipse(
             (
