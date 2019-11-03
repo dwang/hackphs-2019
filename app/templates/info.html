@@ -2,13 +2,18 @@
 <html lang="en">
 
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>PoseRight | Info</title>
+
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='ss.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
 </head>
 
 <body>
     <div class="container center text-center">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand">Postulating Posture</a>
+            <a class="navbar-brand">PoseRight</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -73,17 +78,21 @@
 
         <br>
         <div class="jumbotron">
-                <h1 class="display-4" style="padding-bottom: 6px">What does your score mean?</h1>
-                <p class="lead" style="display: inline-block; vertical-align: top; width: 46%; padding-right: 2em; text-align: left">It's just
-                        a numerical represention of your current posture. It is calculated by comparing your calibration
-                        settings when you configured the device, and your current sitting position.
-                <p class="lead" style="display: inline-block; width: 46%; float: right">Ideally, the lower score you have, the better it is for your health.
+            <h1 class="display-4" style="padding-bottom: 6px">What does your score mean?</h1>
+            <p class="lead"
+                style="display: inline-block; vertical-align: top; width: 46%; padding-right: 2em; text-align: left">
+                It's just
+                a numerical represention of your current posture. It is calculated by comparing your calibration
+                settings when you configured the device, and your current sitting position.
+                <p class="lead" style="display: inline-block; width: 46%; float: right">Ideally, the lower score you
+                    have, the better it is for your health.
                     <br>
-                For example, a score of <code style="color: red">50</code> is nearly perfect, as compared to a score of <code style="color: red">160</code> which means the posture needs a lot of improvement.
-    
-                    </p>
-                    </p>
-            </div>
+                    For example, a score of <code style="color: red">50</code> is nearly perfect, as compared to a score
+                    of <code style="color: red">160</code> which means the posture needs a lot of improvement.
+
+                </p>
+            </p>
+        </div>
 
     </div>
 
